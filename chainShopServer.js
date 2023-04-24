@@ -100,6 +100,7 @@ app.post("/products", (req, res)=>{
         }
     });
 });
+
 app.put("/products/:id", (req, res)=>{
     let body=req.body;
     let id=+req.params.id;
@@ -132,11 +133,8 @@ app.get('/purchases', (req, res)=>{
             
             let allDataArr=JSON.parse(data);
             let prodList=products?products.split(','):[];
-            let prods=allDataArr.products.filter(n=>prodList.includes(n.productName))
-            let prodsIds=prods.map(n=>n.productId);
-
-            let shopIds=(allDataArr.shops.findIndex(n=>n.name==shop))+1;
-
+            prodsIds=prodList.map(n=>+n.substring(2));
+            let shopIds=shop?shop.substring(2):''
             let purchase=allDataArr.purchases;
             if(products)purchase=purchase.filter(n=>prodsIds.includes(n.productid));
             if(shop) purchase=purchase.filter(n=>n.shopId==shopIds);
@@ -196,7 +194,7 @@ app.get('/totalPurchase/shop/:id', (req, res)=>{
             // console.log(pur)
             res.send(pur);
         }
-    })
+    });
 })
 
 app.get('/totalPurchase/product/:id', (req, res)=>{
